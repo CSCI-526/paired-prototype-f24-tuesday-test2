@@ -28,8 +28,17 @@ public class PlayerController : MonoBehaviour
         // Create an object
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            GameObject tower = Instantiate(towerPrefab, transform.position, transform.rotation);
+            // check if the player has enough gold
+            if (GameObject.Find("Money").GetComponent<GoldUpdater>().gold < towerPrefab.GetComponent<TowerController>().cost)
+            {
+                // TODO: display a message to the player
+                return;
+            }
+            // spawn a tower slightly right of the player
+            GameObject tower = Instantiate(towerPrefab, transform.position + new Vector3(2, 0, 0), transform.rotation);
             tower.GetComponent<TowerController>().isPrefab = false;
+            // subtract the cost of the tower from the player's gold
+            GameObject.Find("Money").GetComponent<GoldUpdater>().gold -= towerPrefab.GetComponent<TowerController>().cost;
         }
     }
 }
