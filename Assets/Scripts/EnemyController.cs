@@ -8,7 +8,10 @@ public class EnemyController : MonoBehaviour
     public bool isPrefab = true;
     public int reward = 50;
     public int health = 1;
-    public GameObject Base;
+    public GameObject Base1;
+    public GameObject Base2;
+    public GameObject Player;
+
     void Start()
     {
         // Set the color of the enemy based on the health
@@ -38,14 +41,19 @@ public class EnemyController : MonoBehaviour
         {
             return;
         }
-        // Move the enemy towards the base
+        // Move the enemy towards the closest base
+        GameObject Base = Base1;
+        if (Vector3.Distance(transform.position, Base1.transform.position) > Vector3.Distance(transform.position, Base2.transform.position))
+        {
+            Base = Base2;
+        }
         transform.position = Vector3.MoveTowards(transform.position, Base.transform.position, 5 * Time.deltaTime);
     }
 
     void OnCollisionEnter(Collision collision)
     {
         // If the enemy hits the base, destroy the enemy
-        if (collision.gameObject == Base)
+        if (collision.gameObject == Base1 || collision.gameObject == Base2 || collision.gameObject == Player)
         {
             // stop the game
             Time.timeScale = 0;
